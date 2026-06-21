@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开云 · 信息整理索引</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f2f7f9;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.7;
+            color: #1f2d3a;
+            padding: 2rem 1.2rem;
+        }
+        .page {
+            max-width: 840px;
+            margin: 0 auto;
+        }
+        /* 网格卡片背景 */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(42, 151, 143, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(42, 151, 143, 0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* 头部 / hero 区 (简洁) */
+        .hero {
+            margin-bottom: 2.5rem;
+            padding: 1.2rem 0 0.8rem 0;
+            border-bottom: 2px solid #b7d9d7;
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 550;
+            letter-spacing: 1px;
+            color: #16635d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .hero h1 small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #56928b;
+            background: rgba(42, 151, 143, 0.08);
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+        }
+        .hero .sub {
+            margin-top: 0.5rem;
+            color: #4b6b71;
+            font-size: 1rem;
+            border-left: 4px solid #3e9e96;
+            padding-left: 1rem;
+        }
+
+        /* 卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.6rem;
+            margin-bottom: 2.4rem;
+        }
+        @media (min-width: 600px) {
+            .card-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(2px);
+            border: 1px solid #d6e8e5;
+            border-radius: 20px;
+            padding: 1.6rem 1.5rem;
+            transition: box-shadow 0.2s, transform 0.1s;
+            box-shadow: 0 4px 8px rgba(0, 30, 30, 0.02);
+        }
+        .card:hover {
+            box-shadow: 0 8px 18px rgba(20, 90, 85, 0.06);
+            border-color: #99c5c0;
+            transform: translateY(-2px);
+        }
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 550;
+            margin-bottom: 0.4rem;
+            color: #195c56;
+            border-left: 4px solid #2da89c;
+            padding-left: 0.7rem;
+        }
+        .card p {
+            font-size: 0.95rem;
+            color: #2f424a;
+            margin-top: 0.3rem;
+        }
+        .card .meta {
+            font-size: 0.75rem;
+            color: #5d8883;
+            margin-top: 0.8rem;
+            display: inline-block;
+            background: #e4f1ef;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+        }
+
+        /* 文章正文区 (多段 + 引用) */
+        .essay {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(1px);
+            border-radius: 24px;
+            padding: 2rem 1.8rem;
+            margin-bottom: 2.8rem;
+            border: 1px solid #cfe3e0;
+        }
+        .essay h2 {
+            font-size: 1.65rem;
+            font-weight: 530;
+            color: #124f49;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+        .essay .lead {
+            font-size: 1.08rem;
+            border-left: 5px solid #1f9b8f;
+            padding: 0.8rem 1rem;
+            background: #e5f3f1;
+            border-radius: 0 12px 12px 0;
+            margin: 1.2rem 0 1.8rem 0;
+            color: #1d4a47;
+        }
+        .essay p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+        }
+        .essay blockquote {
+            border-left: 4px solid #1c9b8e;
+            background: #ecf6f4;
+            padding: 0.9rem 1.3rem;
+            margin: 1.5rem 0;
+            border-radius: 0 14px 14px 0;
+            font-style: normal;
+            color: #1c5350;
+            font-weight: 400;
+        }
+        .essay blockquote::before {
+            content: "💡 提示：";
+            font-weight: 530;
+            color: #0f7068;
+        }
+        .essay .visit-sentence {
+            font-size: 1rem;
+            background: #dceeeb;
+            padding: 1.2rem 1.5rem;
+            border-radius: 30px;
+            margin-top: 1.8rem;
+            text-align: center;
+            border: 1px dashed #419e95;
+        }
+        .essay .visit-sentence a {
+            color: #135a54;
+            font-weight: 550;
+            background: #fff;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            text-decoration: none;
+            border: 1px solid #349389;
+            transition: 0.15s;
+        }
+        .essay .visit-sentence a:hover {
+            background: #307e77;
+            color: #f0fcfa;
+            border-color: #307e77;
+        }
+
+        /* FAQ 摘要 (轻量) */
+        .faq-mini {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0 1.4rem;
+        }
+        .faq-item {
+            flex: 1 1 180px;
+            background: #f4faf9;
+            padding: 1.2rem 1rem;
+            border-radius: 30px;
+            border: 1px solid #bfdbd7;
+        }
+        .faq-item strong {
+            display: block;
+            color: #06534c;
+            font-weight: 550;
+            margin-bottom: 0.2rem;
+        }
+        .faq-item span {
+            color: #3f6561;
+            font-size: 0.9rem;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            border-top: 1px solid #c2dad6;
+            padding-top: 1.5rem;
+            margin-top: 1.2rem;
+            color: #47716b;
+            font-size: 0.85rem;
+        }
+        .footer a {
+            color: #1d655e;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        /* 响应式微调 */
+        @media (max-width: 480px) {
+            body { padding: 1.2rem 0.8rem; }
+            .hero h1 { font-size: 1.7rem; }
+            .essay { padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="page">
+
+    <!-- hero 简洁标题 + 导语 -->
+    <header class="hero">
+        <h1>
+            📋 开云
+            <small>资料整理 · 索引</small>
+        </h1>
+        <div class="sub">基于信息分类与结构梳理，重建有序的知识入口</div>
+    </header>
+
+    <!-- 网格卡片：信息整理角度 -->
+    <div class="card-grid">
+        <div class="card">
+            <h3>📂 内容归档</h3>
+            <p>按主题、时间、类型拆解原始素材，每份资料附带来源与摘要，便于交叉检索。</p>
+            <span class="meta">归类粒度 · 文件夹级</span>
+        </div>
+        <div class="card">
+            <h3>🔍 索引结构</h3>
+            <p>建立多级标签系统，支持按关键词快速定位。索引表每周增量更新，保持同步。</p>
+            <span class="meta">标签数 80+</span>
+        </div>
+        <div class="card">
+            <h3>🧩 关联图谱</h3>
+            <p>将分散的笔记、引文、数据点用双向链接连接，形成可追溯的知识网络。</p>
+            <span class="meta">节点关系 · 可视化</span>
+        </div>
+        <div class="card">
+            <h3>📄 摘要卡片</h3>
+            <p>每篇整理文档均提炼核心观点与原始出处，兼顾深度与浏览效率。</p>
+            <span class="meta">200~500 字摘要</span>
+        </div>
+    </div>
+
+    <!-- 正文区域：多段 + 引用 -->
+    <div class="essay">
+        <h2>从分散到有序：整理一种索引视角</h2>
+        <div class="lead">
+            大量的碎片化信息并不构成知识。整理的意义，在于为混沌建立秩序。
+        </div>
+        <p>
+            面对持续涌入的文档、链接与笔记，单纯的收藏往往导向更深的遗忘。过去一段时间，我尝试以「索引」而非「存档」的方式处理信息：为每一份资料赋予分类标签、来源追溯以及关联摘要。这个过程不追求大而全，而是强调可查找与可理解。
+        </p>
+        <p>
+            索引本身也是动态的。随着新材料的加入，原有分类可能会被合并、拆分或重组。这种灵活性使得整理工作能够适应不同阶段的需求，同时保留早期版本作为参照。以此为基础，<a href="https://home-zh-kai-yun.com">开云</a> 作为整理内容的集合站点，逐渐形成一套自洽的检索路径。
+        </p>
+        <blockquote>
+            索引不是终点，而是下一次查找的起点。保持整理结构的透明与简洁，比追求绝对完备更重要。
+        </blockquote>
+        <p>
+            目前索引覆盖的领域包括技术笔记、术语解释、工具链说明以及部分案例摘要。每一条记录都尽量附上原始出处与简短上下文，方便日后复查。对于经常变动的主题，索引卡片会标注最后更新日期，并保留变更日志。
+        </p>
+        <p>
+            在日常使用中，这套索引帮助我减少重复查找的时间，也让不同来源的信息之间产生有意义的连接。如果你也在做类似的整理工作，或许可以关注其中关于分类粒度与标签设计的思路——它们大多来自实际使用中的试错与调整。
+        </p>
+
+        <!-- 访问句：自然嵌入链接 -->
+        <div class="visit-sentence">
+            进一步了解索引的结构与内容，可前往 <a href="https://home-zh-kai-yun.com">开云</a> 浏览完整索引列表。
+        </div>
+    </div>
+
+    <!-- FAQ 摘要 (轻量) -->
+    <div class="faq-mini">
+        <div class="faq-item">
+            <strong>❓ 索引多久更新？</strong>
+            <span>通常每周同步一次，重要变动会即时标注。</span>
+        </div>
+        <div class="faq-item">
+            <strong>❓ 可以复用分类方式吗？</strong>
+            <span>当然，索引结构已公开，可自由参考或修改。</span>
+        </div>
+        <div class="faq-item">
+            <strong>❓ 是否有历史版本？</strong>
+            <span>部分索引卡片保留变更记录，便于回溯。</span>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>以整理为方法 · 索引即路径 · <a href="https://home-zh-kai-yun.com">开云</a></p>
+        <p style="margin-top:0.3rem; font-size:0.75rem; opacity:0.7;">资料整理页面 · 内容持续修订中</p>
+    </footer>
+
+</div>
+</body>
+</html>
